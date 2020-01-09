@@ -10,23 +10,24 @@ using namespace std;
 void printDatesMenu(int);
 string getUsername();
 void getTodaysDate(int&);
+void makePaystub(string, string, int, int, int, int);
 
 string usernameFile = "usernames.txt";
 string rawTimesheetRoot = "_rawTimes.txt";
-string formattedTimesheetRoot = "_formattedTimes.txt";
+string payStubRoot = "_payStub.txt";
 int year = 2020;
 
 int main(){
     int mm;
     getTodaysDate(mm);
     int option;
-    //string username = getUsername();
+    string username = getUsername();
     
-    //string rawTimesheet = username + rawTimesheetRoot;
-    //string formattedTimesheet = username + formattedTimesheetRoot;
+    string rawTimesheet = username + rawTimesheetRoot;
+    string payStub = username + payStubRoot;
+
     int mm1,dd1;
     int mm2,dd2;
-    string inout;
 
     printDatesMenu(mm);
     do{
@@ -44,7 +45,7 @@ int main(){
         dd1 = 2;
         dd2 = 16;
     }
-
+    makePaystub(rawTimesheet, payStub, mm1, mm2, dd1, dd2);
 }
 
 string getUsername(){
@@ -97,4 +98,29 @@ void getTodaysDate(int &mm){
     struct tm *aTime = localtime(&theTime);
     
     mm = aTime->tm_mon + 1; 
+}
+
+void makePaystub(string file1, string file2, int mm1, int mm2, int dd1, int dd2){
+    string templine;
+    string status;
+
+    ifstream inF;
+    stringstream SS; 
+    inF.open(file1);
+
+    if(!inF.is_open()){
+        cout << "File cannot be found!" << endl;
+        exit(1);
+    }
+
+    while(!inF.eof()){
+        do{
+        getline(inF, templine);
+        SS << templine;
+        cout << templine << endl;
+        }while(status != "OUT");
+
+
+    }
+    inF.close();
 }

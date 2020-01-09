@@ -1,6 +1,6 @@
 #include <iostream>
-#include <vector>
 #include <time.h>
+#include <vector>
 #include <fstream>
 #include <string>
 
@@ -20,8 +20,6 @@ int main()
 {
     int d, mm, yyyy, h, min, sec;
     int temp;
- 
-    int usernameCount = 0;
 
     string username = getUsername();
     

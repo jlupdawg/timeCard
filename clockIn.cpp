@@ -110,10 +110,17 @@ void printTime(int d, int mm, int yyyy, int h, int min, int sec){
 void toFile(string status,string file1, string file2, int d, int mm, int yyyy, int h, int min, int sec){
     ofstream oF;
     
-    oF.open(file1, ofstream::app);
-    oF << status << " " << d << " " << mm << " " << yyyy << " " << h << " " << min << " " << sec << endl;
-    oF.close();
-    
+    if(status == "IN"){
+        oF.open(file1, ofstream::app);
+        oF << endl << status << " " << d << " " << mm << " " << yyyy << " " << h << " " << min << " " << sec << endl;
+        oF.close();
+    }
+    else{
+        oF.open(file1, ofstream::app);
+        oF << status << " " << d << " " << mm << " " << yyyy << " " << h << " " << min << " " << sec;
+        oF.close();
+    }
+
     oF.open(file2, ofstream::app);
     oF << mm << "/" << d << "/" << yyyy << " ";
     oF << status << " ";

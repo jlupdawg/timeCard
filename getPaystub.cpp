@@ -127,6 +127,9 @@ void recordHours(string file1, string file2, int mm1, int mm2, int dd1, int dd2)
         do{
             SS.str("");
             getline(inF, templine);
+            if(templine == ""){
+                continue;
+            }
             SS << templine;
             SS >> status >> tempDay >> tempMonth;
             if(status == "OUT"){

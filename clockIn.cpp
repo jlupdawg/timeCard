@@ -90,7 +90,7 @@ void printMainMenu(){
 void getTime(int &d, int &mm, int &yyyy, int &h, int &min, int &sec){
         
     time_t theTime = time(NULL);
-    theTime -= 6*60*60;
+    //theTime -= 6*60*60;
     struct tm *aTime = localtime(&theTime);
     
     d = aTime->tm_mday;

@@ -1,6 +1,11 @@
 #ifndef LOG_H
 #define LOG_H
 
+#include<vector>
+#include<string>
+
+using namespace std;
+
 class Log{
     private:
         int numUsers;

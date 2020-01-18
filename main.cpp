@@ -8,7 +8,7 @@ using namespace std;
 int main(){
     string usernameFile = "usernames.txt";
     string rawTimesheetRoot = "_rawTimes.txt";
-    string rawTimesheetRoot = "_payStub.txt";
+    string paystubRoot = "_payStub.txt";
 
     string username;
     

@@ -19,12 +19,12 @@ void Log::sortUserData(){
 
     bool case1, case1b, case2, case2b, case3, case3b, case4;
 
-    for(int i = 1; i < currentVec.size(); i++){
+    for(unsigned int i = 1; i < currentVec.size(); i++){
         mins.at(i-1) = currentVec.at(i);
     }
 
-    for(int i = 0; i < userData.size(); i++){
-        for(int j = i; j < userData.size(); j++){
+    for(unsigned int i = 0; i < userData.size(); i++){
+        for(unsigned int j = i; j < userData.size(); j++){
             currentVec = userData.at(j);
             case1 = (currentVec.at(1) < mins.at(0));
             case1b = (currentVec.at(1) == mins.at(0));
@@ -38,7 +38,7 @@ void Log::sortUserData(){
                 swapVec = userData.at(i);
                 userData.at(i) = currentVec;
                 currentVec = swapVec;
-                for(int i = 1; i < currentVec.size(); i++){
+                for(unsigned int i = 1; i < currentVec.size(); i++){
                     mins.at(i-1) = currentVec.at(i);
                 }
             }
@@ -76,9 +76,9 @@ void Log::overrideData(){
     if(!oF.is_open()){
         exit(1);
     }
-    for(int i = 0; i < userData.size(); i++){
+    for(unsigned int i = 0; i < userData.size(); i++){
         temp = userData.at(i);
-        for(int j = 0; j < temp.size(); j++){
+        for(unsigned int j = 0; j < temp.size(); j++){
             oF << temp.at(i) << " ";
         }
         oF << endl;
@@ -97,8 +97,6 @@ string Log::GetUsername(int i) const{
 
 void Log::SetUserFile(string usernameFile){
     this->usernameFile = usernameFile;
-
-        string paystubFile;
 }
 
 void Log::SetRawDataFile(string rawdataFile){
@@ -157,7 +155,7 @@ void Log::printPaystub(int option){
     }
 
     //Delete all data not in range
-    for(int i = 0; i < userData.size();){
+    for(unsigned int i = 0; i < userData.size();){
         tempVec = userData.at(i); 
         if(tempVec.at(0) < mm1 || tempVec.at(0) > mm2){
             userData.erase(userData.begin() + i);
@@ -185,18 +183,18 @@ void Log::printPaystub(int option){
     oF << left << "TOTAL" << endl;
 
 
-    int i = 0;
-    while(i < userData.size()){
-        tempVec = userData.at(i);
+    unsigned int p = 0;
+    while(p < userData.size()){
+        tempVec = userData.at(p);
         day1Total = 1440*tempVec.at(2) + 60*tempVec.at(3) + tempVec.at(4);
         oF << right << setw(2) << setfill('0') << tempVec.at(2) << "/";
         oF << right << setw(2) << setfill('0') << tempVec.at(1) << "\t";
         oF << right << setw(2) << setfill('0') << tempVec.at(3) << ":";
         oF << right << setw(2) << setfill('0') << tempVec.at(4) << " - ";
 
-        i++;
+        p++;
 
-        tempVec = userData.at(i);
+        tempVec = userData.at(p);
         day2Total = 1440*tempVec.at(2) + 60*tempVec.at(3) + tempVec.at(4);
         oF << right << setw(2) << setfill('0') << tempVec.at(2) << "/";
         oF << right << setw(2) << setfill('0') << tempVec.at(1) << "\t";
@@ -207,7 +205,7 @@ void Log::printPaystub(int option){
         minutesTotal = (day2Total - day1Total)%60;
         total += day2Total - day1Total;
 
-        i++;
+        p++;
     }
 
     totalHours = total/60;

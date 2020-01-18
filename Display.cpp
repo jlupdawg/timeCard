@@ -4,6 +4,7 @@
 #include <iomanip>
 
 #include "Display.h"
+#include "Log.h"
 
 using namespace std;
 
@@ -30,11 +31,10 @@ string Display::printNames(){
     int numUsers;
     int option;
     cout << "Select your name" << endl;
-    //TODO add compatability with storage class
-    /*
-    numUsers = stoClass.GetNumUsers();
+    
+    numUsers = myIO.GetNumUsers();
     for(int i = 0; i < numUsers; i++){
-        cout << i+1 << "." << stoClass.GetUsername(i);
+        cout << i+1 << "." << myIO.GetUsername(i) << endl;
     }
 
     do{
@@ -43,8 +43,8 @@ string Display::printNames(){
             cout << "Option Not Valid. Please Try Again!";
     }while(option < 1 || option > numUsers);
 
-    username = stoClass.getUsername(option);
-    */
+    username = myIO.GetUsername(option);
+    
     return username;
 }
 
@@ -54,7 +54,6 @@ int Display::printOptions(){
     cout << "1. Clock In" << endl;
     cout << "2. Clock Out" << endl;
     cout << "3. Custom Time" << endl;
-    //TODO add storage class sorting in a vector
     cout << "4. Print Paystub" << endl;
     
     do{
@@ -65,6 +64,7 @@ int Display::printOptions(){
 
     return option;
 }
+
 Display::Display(){
     inputStatus = "";
     inputData.resize(4);

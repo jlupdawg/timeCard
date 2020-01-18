@@ -4,12 +4,15 @@
 #include<string>
 #include<vector>
 
+#include "Log.h"
+
 using namespace std;
 
 class Display{
     private:
         vector<int> inputData;
         string inputStatus;
+        Log myIO;
     public:
         void printData() const;
         void clearData();

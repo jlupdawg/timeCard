@@ -8,7 +8,6 @@ using namespace std;
 
 class Log{
     private:
-        int numUsers;
         vector<string> usernameVec;
         vector<vector<int>> userData;
         string usernameFile;

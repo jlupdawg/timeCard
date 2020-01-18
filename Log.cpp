@@ -6,13 +6,15 @@
 
 #include "log.h"
 
+#include <iostream> //REMOVE 
+
 using namespace std;
        
 void Log::sortUserData(){
     vector<int> currentVec;
     vector<int> swapVec;
     
-    vector<int> mins; //minMonth, minDay, minHour, minMinute;
+    vector<int> mins(4); //minMonth, minDay, minHour, minMinute;
 
     int minPos = 0;
     vector<int> minVec = userData.at(minPos);
@@ -94,12 +96,10 @@ void Log::getUserData(){
     string templine;
     vector<int> tempVec;
     int tempInt;
-
     inF.open(rawDataFile);
     if(!inF.is_open()){
         exit(1);
     }
-
     while(!inF.eof()){
         getline(inF, templine);
         if(templine == ""){
@@ -113,7 +113,6 @@ void Log::getUserData(){
         }
         userData.push_back(tempVec);
     }
-
     inF.close();
 }
 
@@ -138,15 +137,14 @@ void Log::pullUsernames(){
 void Log::refreshUserData(){
     userData.clear();
     getUserData();
-    sortUserData();
-    overrideData();
-    userData.clear();
-    getUserData();
+    //sortUserData(); //TODO FIX THIS!!!
+    //overrideData();
+    //userData.clear();
+    //getUserData();
 }
 
-
 int Log::GetNumUsers() const{
-    return numUsers;
+    return usernameVec.size();
 }
 
 string Log::GetUsername(int i) const{
@@ -158,7 +156,7 @@ void Log::SetUserFile(string usernameFile){
     pullUsernames();
 }
 
-void Log::SetRawDataFile(string rawdataFile){
+void Log::SetRawDataFile(string rawDataFile){
     this->rawDataFile = rawDataFile;
 }
 
@@ -283,7 +281,7 @@ void Log::printPaystub(int option){
 void Log::checkTimes(bool& allGood, int& inOut, int& month, int& day){
     int status, lastStatus = 0;
     vector<int> tempVec;
-
+    allGood = true;
     for(unsigned int i = 0; i < userData.size(); i++){
         tempVec = userData.at(i);
         status = tempVec.at(0);
@@ -296,4 +294,5 @@ void Log::checkTimes(bool& allGood, int& inOut, int& month, int& day){
         }
         lastStatus = status;
     }
+    
 }

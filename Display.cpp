@@ -25,7 +25,7 @@ string Display::printNames(){
             cout << "Option Not Valid. Please Try Again!";
     }while(option < 1 || option > numUsers);
 
-    username = myIO.GetUsername(option);
+    username = myIO.GetUsername(option-1);
     
     return username;
 }

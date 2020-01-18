@@ -29,8 +29,6 @@ int main(){
     data.SetRawDataFile(rawTimeSheetFile);
     data.SetPaystubFile(paystubFile);
 
-    
-
     while(1){
         terminal.SetLog(data);
         data.checkTimes(allGood, status, month, day);

@@ -21,6 +21,8 @@ class Log{
         void getDate();
         void overrideData();
         void getUserData();
+        void pullUsernames();
+        void refreshUserData();
 
     public:
         int GetNumUsers() const;
@@ -32,7 +34,7 @@ class Log{
         void clockOut();
         void customInOut(int, int, int, int, int);
         void printPaystub(int);
-        bool checkTimes();
+        void checkTimes(bool&, int&, int&, int&);
 };
 
 #endif

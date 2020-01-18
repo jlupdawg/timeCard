@@ -10,18 +10,15 @@ using namespace std;
 
 class Display{
     private:
-        vector<int> inputData;
-        string inputStatus;
         Log myIO;
     public:
-        void printData() const;
-        void clearData();
-        void setData(string, vector<int>);
         string printNames();
         int printOptions();
-                
-        Display();
-        Display(string,vector<int>);
+        void SetLog(Log);
+        void printReminder(int, int, int);
+        void customInOut(int&, int&, int&, int&, int&);
+        int printPayPeriods();
+        void customString(string);
 };
 
 

@@ -113,7 +113,37 @@ void Log::getUserData(){
         }
         userData.push_back(tempVec);
     }
+
+    inF.close();
 }
+
+void Log::pullUsernames(){
+    ifstream inF;
+    string templine;
+    inF.open(usernameFile);
+    if(!inF.is_open()){
+        exit(1);
+    }
+
+    while(!inF.eof()){
+        getline(inF, templine);
+        if(templine == ""){
+            continue;
+        }
+        usernameVec.push_back(templine);
+    }
+    inF.close();
+}
+
+void Log::refreshUserData(){
+    userData.clear();
+    getUserData();
+    sortUserData();
+    overrideData();
+    userData.clear();
+    getUserData();
+}
+
 
 int Log::GetNumUsers() const{
     return numUsers;
@@ -125,6 +155,7 @@ string Log::GetUsername(int i) const{
 
 void Log::SetUserFile(string usernameFile){
     this->usernameFile = usernameFile;
+    pullUsernames();
 }
 
 void Log::SetRawDataFile(string rawdataFile){
@@ -141,6 +172,7 @@ void Log::clockIn(){
     oF.open(rawDataFile, ofstream::app);
     oF << endl << 1 << " " << month << " " << day << " " << hour << " " << minute << endl;
     oF.close();
+    refreshUserData();
 }
 
 void Log::clockOut(){
@@ -149,6 +181,7 @@ void Log::clockOut(){
     oF.open(rawDataFile, ofstream::app);
     oF << endl << 0 << " " << month << " " << day << " " << hour << " " << minute << endl;
     oF.close();
+    refreshUserData();
 }
 
 void Log::customInOut(int status , int month, int day, int hour, int minute){
@@ -156,6 +189,7 @@ void Log::customInOut(int status , int month, int day, int hour, int minute){
     oF.open(rawDataFile, ofstream::app);
     oF << endl << status << " " << month << " " << day << " " << hour << " " << minute << endl;
     oF.close();
+    refreshUserData();
 }
 
 void Log::printPaystub(int option){
@@ -246,8 +280,22 @@ void Log::printPaystub(int option){
     oF.close();
 }
 
-bool Log::checkTimes(){
+void Log::checkTimes(bool& allGood, int& inOut, int& month, int& day){
     bool allGood;
-    //TODO MAKE THIS FUNCTION
-    return allGood;
+    int count, status;
+    int lastStatus = 0;
+    vector<int> tempVec;
+
+    for(unsigned int i = 0; i < userData.size(); i++){
+        tempVec = userData.at(i);
+        status = tempVec.at(0);
+        if(status == lastStatus){
+            allGood = false;
+            inOut = status;
+            month = tempVec.at(1);
+            day = tempVec.at(2);
+            break;
+        }
+        lastStatus = status;
+    }
 }

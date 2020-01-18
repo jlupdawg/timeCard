@@ -20,6 +20,7 @@ class Log{
         void getDateTime();
         void getDate();
         void overrideData();
+        void getUserData();
 
     public:
         int GetNumUsers() const;
@@ -31,6 +32,7 @@ class Log{
         void clockOut();
         void customInOut(int, int, int, int, int);
         void printPaystub(int);
+        bool checkTimes();
 };
 
 #endif

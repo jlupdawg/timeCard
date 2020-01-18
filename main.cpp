@@ -11,6 +11,9 @@ int main(){
     string paystubRoot = "_payStub.txt";
 
     string username;
+
+    Display terminal;
+    Log data;
     
 
     return 0;

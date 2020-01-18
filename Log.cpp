@@ -1,6 +1,7 @@
 #include <vector>
 #include <time.h>
 #include <fstream>
+#include <sstream>
 #include <iomanip>
 
 #include "log.h"
@@ -85,6 +86,33 @@ void Log::overrideData(){
     }
 
     oF.close();
+}
+
+void Log::getUserData(){
+    ifstream inF;
+    stringstream SS;
+    string templine;
+    vector<int> tempVec;
+    int tempInt;
+
+    inF.open(rawDataFile);
+    if(!inF.is_open()){
+        exit(1);
+    }
+
+    while(!inF.eof()){
+        getline(inF, templine);
+        if(templine == ""){
+            continue;
+        }
+        SS << templine;
+        tempVec.clear();
+        for(unsigned int i = 0; i < 5; i++){
+            SS >> tempInt;
+            tempVec.push_back(tempInt);
+        }
+        userData.push_back(tempVec);
+    }
 }
 
 int Log::GetNumUsers() const{
@@ -216,4 +244,10 @@ void Log::printPaystub(int option){
     oF << right << setw(2) << setfill('0') << totalHours << ":";
     oF << right << setw(2) << setfill('0') << totalMinutes << endl;
     oF.close();
+}
+
+bool Log::checkTimes(){
+    bool allGood;
+    //TODO MAKE THIS FUNCTION
+    return allGood;
 }

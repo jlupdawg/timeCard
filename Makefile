@@ -12,3 +12,6 @@ Log.o: Log.cpp Log.h
 
 clean:
 	rm *.o main.exe
+
+partialClean:
+	rm *.o

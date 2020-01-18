@@ -101,6 +101,7 @@ void Display::customInOut(int& status, int& month, int& day, int& hour, int& min
 }
 
 int Display::printPayPeriods(){
+    int option;
     int day1 = 2, day2 = 15; //Also change in Log.cpp
     cout << "Select Pay Period:" << endl;
     for(int i = 1; i <= 12; i++){
@@ -112,6 +113,13 @@ int Display::printPayPeriods(){
                 cout << i+i << ".) " << i << "/" << day2  << " - " << 1 << "/" << day1 << endl;
             }
     }
+    do{
+        cin >> option;
+        if(option < 0 || option > 24){
+            cout << "Invalid Option. Please Try Again." << endl;
+        }
+    }while(option < 0 || option > 24);
+    return option;
 }
 
 void Display::customString(string message){

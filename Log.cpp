@@ -281,9 +281,7 @@ void Log::printPaystub(int option){
 }
 
 void Log::checkTimes(bool& allGood, int& inOut, int& month, int& day){
-    bool allGood;
-    int count, status;
-    int lastStatus = 0;
+    int status, lastStatus = 0;
     vector<int> tempVec;
 
     for(unsigned int i = 0; i < userData.size(); i++){

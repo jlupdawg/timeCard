@@ -13,40 +13,31 @@ using namespace std;
 void Log::sortUserData(){
     vector<int> currentVec;
     vector<int> swapVec;
-    
-    vector<int> mins(4); //minMonth, minDay, minHour, minMinute;
 
-    int minPos = 0;
-    vector<int> minVec = userData.at(minPos);
-    currentVec = userData.at(minPos);
+    vector<int> minVec = userData.at(0);
 
     bool case1, case1b, case2, case2b, case3, case3b, case4;
 
-    for(unsigned int i = 1; i < currentVec.size(); i++){
-        mins.at(i-1) = currentVec.at(i);
-    }
-
     for(unsigned int i = 0; i < userData.size(); i++){
-        for(unsigned int j = i; j < userData.size(); j++){
+        for(unsigned int j = i+1; j < userData.size()-1; j++){
             currentVec = userData.at(j);
-            case1 = (currentVec.at(1) < mins.at(0));
-            case1b = (currentVec.at(1) == mins.at(0));
-            case2 = (currentVec.at(2) < mins.at(1));
-            case2b = (currentVec.at(2) == mins.at(1));
-            case3 = (currentVec.at(3) < mins.at(2));
-            case3b = (currentVec.at(3) == mins.at(2));
-            case4 = (currentVec.at(4) < mins.at(3));
+            minVec = userData.at(i);
+            case1 = (currentVec.at(1) < minVec.at(1));
+            case1b = (currentVec.at(1) == minVec.at(1));
+            case2 = (currentVec.at(2) < minVec.at(2));
+            case2b = (currentVec.at(2) == minVec.at(2));
+            case3 = (currentVec.at(3) < minVec.at(3));
+            case3b = (currentVec.at(3) == minVec.at(3));
+            case4 = (currentVec.at(4) < minVec.at(4));
+            cout << "ENTRY: " << i << "," << j << " " << case1 << case1b << case2 <<case2b << case3 << case3b << case4 << endl;
 
             if(case1 || (case1b&&case2) || (case1b&&case2b&&case3) || (case1b&&case2b&&case3b&&case4)){
+                cout << "CALLED MINS CASE" << endl;
                 swapVec = userData.at(i);
-                userData.at(i) = currentVec;
-                currentVec = swapVec;
-                for(unsigned int i = 1; i < currentVec.size(); i++){
-                    mins.at(i-1) = currentVec.at(i);
-                }
+                userData.at(i) = userData.at(j);
+                userData.at(j) = swapVec;
             }
         }
-
     }
 }
 
@@ -82,8 +73,10 @@ void Log::overrideData(){
     for(unsigned int i = 0; i < userData.size(); i++){
         temp = userData.at(i);
         for(unsigned int j = 0; j < temp.size(); j++){
-            oF << temp.at(i) << " ";
+            oF << temp.at(j) << " ";
+            cout << "WRITING " << temp.at(j);
         }
+        cout << endl;
         oF << endl;
     }
 
@@ -105,12 +98,16 @@ void Log::getUserData(){
         if(templine == ""){
             continue;
         }
+        SS.clear();
         SS << templine;
+        cout << "TEMPLINE: " << templine << endl;
         tempVec.clear();
         for(unsigned int i = 0; i < 5; i++){
             SS >> tempInt;
             tempVec.push_back(tempInt);
+            cout << tempInt << " ";
         }
+        cout << endl;
         userData.push_back(tempVec);
     }
     inF.close();
@@ -137,8 +134,8 @@ void Log::pullUsernames(){
 void Log::refreshUserData(){
     userData.clear();
     getUserData();
-    //sortUserData(); //TODO FIX THIS!!!
-    //overrideData();
+    sortUserData(); //TODO FIX THIS!!!
+    overrideData();
     //userData.clear();
     //getUserData();
 }
@@ -168,7 +165,7 @@ void Log::clockIn(){
     ofstream oF;
     getDateTime();
     oF.open(rawDataFile, ofstream::app);
-    oF << endl << 1 << " " << month << " " << day << " " << hour << " " << minute << endl;
+    oF << endl << 1 << " " << month << " " << day << " " << hour << " " << minute;
     oF.close();
     refreshUserData();
 }
@@ -177,7 +174,7 @@ void Log::clockOut(){
     ofstream oF;
     getDateTime();
     oF.open(rawDataFile, ofstream::app);
-    oF << endl << 0 << " " << month << " " << day << " " << hour << " " << minute << endl;
+    oF << endl << 0 << " " << month << " " << day << " " << hour << " " << minute;
     oF.close();
     refreshUserData();
 }
@@ -185,7 +182,7 @@ void Log::clockOut(){
 void Log::customInOut(int status , int month, int day, int hour, int minute){
     ofstream oF;
     oF.open(rawDataFile, ofstream::app);
-    oF << endl << status << " " << month << " " << day << " " << hour << " " << minute << endl;
+    oF << endl << status << " " << month << " " << day << " " << hour << " " << minute;
     oF.close();
     refreshUserData();
 }

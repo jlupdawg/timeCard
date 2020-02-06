@@ -1,1 +1,5 @@
- 
+DATE 	WORKED       	TOTAL
+
+
+
+GRAND TOTAL : 00:00

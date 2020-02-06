@@ -29,10 +29,10 @@ void Log::sortUserData(){
             case3 = (currentVec.at(3) < minVec.at(3));
             case3b = (currentVec.at(3) == minVec.at(3));
             case4 = (currentVec.at(4) < minVec.at(4));
-            cout << "ENTRY: " << i << "," << j << " " << case1 << case1b << case2 <<case2b << case3 << case3b << case4 << endl;
+            //cout << "ENTRY: " << i << "," << j << " " << case1 << case1b << case2 <<case2b << case3 << case3b << case4 << endl;
 
             if(case1 || (case1b&&case2) || (case1b&&case2b&&case3) || (case1b&&case2b&&case3b&&case4)){
-                cout << "CALLED MINS CASE" << endl;
+                //cout << "CALLED MINS CASE" << endl;
                 swapVec = userData.at(i);
                 userData.at(i) = userData.at(j);
                 userData.at(j) = swapVec;
@@ -74,9 +74,9 @@ void Log::overrideData(){
         temp = userData.at(i);
         for(unsigned int j = 0; j < temp.size(); j++){
             oF << temp.at(j) << " ";
-            cout << "WRITING " << temp.at(j);
+            //cout << "WRITING " << temp.at(j);
         }
-        cout << endl;
+        //cout << endl;
         oF << endl;
     }
 
@@ -100,14 +100,14 @@ void Log::getUserData(){
         }
         SS.clear();
         SS << templine;
-        cout << "TEMPLINE: " << templine << endl;
+        //cout << "TEMPLINE: " << templine << endl;
         tempVec.clear();
         for(unsigned int i = 0; i < 5; i++){
             SS >> tempInt;
             tempVec.push_back(tempInt);
-            cout << tempInt << " ";
+            //cout << tempInt << " ";
         }
-        cout << endl;
+        //cout << endl;
         userData.push_back(tempVec);
     }
     inF.close();
@@ -134,10 +134,10 @@ void Log::pullUsernames(){
 void Log::refreshUserData(){
     userData.clear();
     getUserData();
-    sortUserData(); //TODO FIX THIS!!!
+    sortUserData();
     overrideData();
-    //userData.clear();
-    //getUserData();
+    userData.clear();
+    getUserData();
 }
 
 int Log::GetNumUsers() const{
@@ -189,7 +189,7 @@ void Log::customInOut(int status , int month, int day, int hour, int minute){
 
 void Log::printPaystub(int option){
     int mm1, mm2, dd1, dd2;
-    int day1 = 2, day2 = 15;
+    int day1 = 2, day2 = 15; //Also change in Display.cpp
     vector<int> tempVec;
 
     ofstream oF;
@@ -206,27 +206,30 @@ void Log::printPaystub(int option){
         dd2 = day1-1;
     }
     else{
-        mm1 = mm2 = option;
+        mm1 = mm2 = (option+1)/2;
         dd1 = day1;
         dd2 = day2;
     }
-
+    refreshUserData();
     //Delete all data not in range
-    for(unsigned int i = 0; i < userData.size();){
+    //cout << "USERDATA SIZE: " << userData.size() << endl;
+    for(unsigned int i = 0; i < userData.size(); i++){
         tempVec = userData.at(i); 
-        if(tempVec.at(0) < mm1 || tempVec.at(0) > mm2){
+        if(tempVec.at(1) < mm1 || tempVec.at(1) > mm2){
             userData.erase(userData.begin() + i);
+            //cout << "ERASED 1" << endl;
         }
-        else if(tempVec.at(0) == mm1 && tempVec.at(1) < dd1){
+        else if(tempVec.at(1) == mm1 && tempVec.at(2) < dd1){
             userData.erase(userData.begin() + i);
+            //cout << "ERASED 2" << endl;
         }
-        else if(tempVec.at(0) == mm2 && tempVec.at(1) > dd2){
+        else if(tempVec.at(1) == mm2 && tempVec.at(2) > dd2){
             userData.erase(userData.begin() + i);
-        }
-        else{
-            i++;
+            //cout << "ERASED 3" << endl;
         }
     }
+
+    //cout << "USERDATA SIZE: " << userData.size() << endl;
 
     oF.open(paystubFile);
     if(!oF.is_open()){
@@ -244,6 +247,7 @@ void Log::printPaystub(int option){
     while(p < userData.size()){
         tempVec = userData.at(p);
         day1Total = 1440*tempVec.at(2) + 60*tempVec.at(3) + tempVec.at(4);
+        cout << "DAY1TOTAL" << endl;
         oF << right << setw(2) << setfill('0') << tempVec.at(2) << "/";
         oF << right << setw(2) << setfill('0') << tempVec.at(1) << "\t";
         oF << right << setw(2) << setfill('0') << tempVec.at(3) << ":";
@@ -268,7 +272,7 @@ void Log::printPaystub(int option){
     totalHours = total/60;
     totalMinutes = total%60;
 
-    oF << endl << endl;
+    oF << endl;
     oF << endl << "GRAND TOTAL : ";
     oF << right << setw(2) << setfill('0') << totalHours << ":";
     oF << right << setw(2) << setfill('0') << totalMinutes << endl;

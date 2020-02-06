@@ -236,18 +236,18 @@ void Log::printPaystub(int option){
         exit(1);
     }
 
-    oF << left << setw(5) << setfill(' ') << "DATE";
-    oF << "\t";
-    oF << left << setw(13) << setfill(' ') <<  "WORKED";
-    oF << "\t";
-    oF << left << "TOTAL" << endl;
+    oF << "PAYSTUB FOR ";
+    oF << setw(2) << setfill('0') << mm1 << "/";
+    oF << setw(2) << setfill('0') << dd1 << " - ";
+    oF << setw(2) << setfill('0') << mm2 << "/";
+    oF << setw(2) << setfill('0') << dd2 << endl;
+
 
 
     unsigned int p = 0;
     while(p < userData.size()){
         tempVec = userData.at(p);
         day1Total = 1440*tempVec.at(2) + 60*tempVec.at(3) + tempVec.at(4);
-        cout << "DAY1TOTAL" << endl;
         oF << right << setw(2) << setfill('0') << tempVec.at(2) << "/";
         oF << right << setw(2) << setfill('0') << tempVec.at(1) << "\t";
         oF << right << setw(2) << setfill('0') << tempVec.at(3) << ":";
@@ -260,10 +260,14 @@ void Log::printPaystub(int option){
         oF << right << setw(2) << setfill('0') << tempVec.at(2) << "/";
         oF << right << setw(2) << setfill('0') << tempVec.at(1) << "\t";
         oF << right << setw(2) << setfill('0') << tempVec.at(3) << ":";
-        oF << right << setw(2) << setfill('0') << tempVec.at(4) << endl;
+        oF << right << setw(2) << setfill('0') << tempVec.at(4) << " -- ";
 
         hoursTotal = (day2Total - day1Total)/60;
         minutesTotal = (day2Total - day1Total)%60;
+
+        oF << right << setw(2) << setfill('0') << hoursTotal << ":";
+        oF << right << setw(2) << setfill('0') << minutesTotal << endl;
+
         total += day2Total - day1Total;
 
         p++;

@@ -19,6 +19,7 @@ class Display{
         void customInOut(int&, int&, int&, int&, int&);
         int printPayPeriods();
         void customString(string);
+        string GetPath();
 };
 
 

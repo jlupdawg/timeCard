@@ -33,6 +33,7 @@ class Log{
         void clockOut();
         void customInOut(int, int, int, int, int);
         void printPaystub(int);
+        void printAllPaystubs(string);
         void checkTimes(bool&, int&, int&, int&);
 };
 

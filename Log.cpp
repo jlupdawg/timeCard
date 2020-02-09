@@ -213,7 +213,7 @@ void Log::printPaystub(int option){
     refreshUserData();
     //Delete all data not in range
     //cout << "USERDATA SIZE: " << userData.size() << endl;
-    for(unsigned int i = 0; i < userData.size(); i++){
+    for(unsigned int i = 0; i < userData.size();){
         tempVec = userData.at(i); 
         if(tempVec.at(1) < mm1 || tempVec.at(1) > mm2){
             userData.erase(userData.begin() + i);
@@ -226,6 +226,9 @@ void Log::printPaystub(int option){
         else if(tempVec.at(1) == mm2 && tempVec.at(2) > dd2){
             userData.erase(userData.begin() + i);
             //cout << "ERASED 3" << endl;
+        }
+        else{
+            i++;
         }
     }
 
@@ -280,6 +283,114 @@ void Log::printPaystub(int option){
     oF << endl << "GRAND TOTAL : ";
     oF << right << setw(2) << setfill('0') << totalHours << ":";
     oF << right << setw(2) << setfill('0') << totalMinutes << endl;
+    oF.close();
+}
+
+void Log::printAllPaystubs(string path){
+    int option;
+    int mm1, mm2, dd1, dd2;
+    int day1 = 2, day2 = 15; //Also change in Display.cpp
+    vector<int> tempVec;
+
+    ofstream oF;
+    int totalHours, totalMinutes, total;
+    int day1Total, day2Total, hoursTotal, minutesTotal;
+    string tempPath = (path+paystubFile);
+    oF.open(tempPath);
+    if(!oF.is_open()){
+        //cout << "FILE NOT OPENED" << endl;
+        exit(1);
+    }
+
+    for(unsigned int i = 1; i <= 24; i++){
+        //cout << "LOOP " << i << endl;
+        option = i;
+        totalHours = totalMinutes = total = 0;
+        day1Total = day2Total = hoursTotal = minutesTotal = 0;
+
+        if(option%2 == 0){
+            mm1 = option/2;
+            mm2 = option/2 + 1;
+            dd1 = day2+1;
+            dd2 = day1-1;
+        }
+        else{
+            mm1 = mm2 = (option+1)/2;
+            dd1 = day1;
+            dd2 = day2;
+        }
+        refreshUserData();
+        //Delete all data not in range
+        //cout << "USERDATA SIZE: " << userData.size() << endl;
+        for(unsigned int j = 0; j < userData.size();){
+            tempVec = userData.at(j); 
+            if(tempVec.at(1) < mm1 || tempVec.at(1) > mm2){
+                userData.erase(userData.begin() + j);
+                //cout << "ERASED 1" << endl;
+            }
+            else if(tempVec.at(1) == mm1 && tempVec.at(2) < dd1){
+                userData.erase(userData.begin() + j);
+                //cout << "ERASED 2" << endl;
+            }
+            else if(tempVec.at(1) == mm2 && tempVec.at(2) > dd2){
+                userData.erase(userData.begin() + j);
+                //cout << "ERASED 3" << endl;
+            }
+            else{
+                j++;
+            }
+        }
+
+        //cout << "USERDATA SIZE: " << userData.size() << endl;
+
+        oF << setw(40) << setfill('-') << "-" << endl;
+        oF << "PAYSTUB FOR ";
+        oF << setw(2) << setfill('0') << mm1 << "/";
+        oF << setw(2) << setfill('0') << dd1 << " - ";
+        oF << setw(2) << setfill('0') << mm2 << "/";
+        oF << setw(2) << setfill('0') << dd2 << endl;
+
+
+
+        unsigned int p = 0;
+        while(p < userData.size()){
+            tempVec = userData.at(p);
+            day1Total = 1440*tempVec.at(2) + 60*tempVec.at(3) + tempVec.at(4);
+            oF << right << setw(2) << setfill('0') << tempVec.at(1) << "/";
+            oF << right << setw(2) << setfill('0') << tempVec.at(2) << "\t";
+            oF << right << setw(2) << setfill('0') << tempVec.at(3) << ":";
+            oF << right << setw(2) << setfill('0') << tempVec.at(4) << " - ";
+
+            p++;
+
+            tempVec = userData.at(p);
+            day2Total = 1440*tempVec.at(2) + 60*tempVec.at(3) + tempVec.at(4);
+            oF << right << setw(2) << setfill('0') << tempVec.at(1) << "/";
+            oF << right << setw(2) << setfill('0') << tempVec.at(2) << "\t";
+            oF << right << setw(2) << setfill('0') << tempVec.at(3) << ":";
+            oF << right << setw(2) << setfill('0') << tempVec.at(4) << " -- ";
+
+            hoursTotal = (day2Total - day1Total)/60;
+            minutesTotal = (day2Total - day1Total)%60;
+
+            oF << right << setw(2) << setfill('0') << hoursTotal << ":";
+            oF << right << setw(2) << setfill('0') << minutesTotal << endl;
+
+            total += day2Total - day1Total;
+
+            p++;
+        }
+
+        totalHours = total/60;
+        totalMinutes = total%60;
+
+        oF << endl;
+        oF << endl << "GRAND TOTAL : ";
+        oF << right << setw(2) << setfill('0') << totalHours << ":";
+        oF << right << setw(2) << setfill('0') << totalMinutes << endl;
+
+        oF << setw(40) << setfill('-') << "-" << endl;
+    }
     oF.close();
 }
 

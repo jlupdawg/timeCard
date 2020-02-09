@@ -37,13 +37,14 @@ int Display::printOptions(){
     cout << "2. Clock Out" << endl;
     cout << "3. Custom Time" << endl;
     cout << "4. Print Paystub" << endl;
-    cout << "5. Exit the program" << endl;
+    cout << "5. Print All Paystubs" << endl;
+    cout << "6. Exit the program" << endl;
     
     do{
         cin >> option;
-        if(option < 1 || option > 5)
+        if(option < 1 || option > 6)
             cout << "Option Not Valid";
-    }while(option < 1 || option > 5);
+    }while(option < 1 || option > 6);
 
     return option;
 }
@@ -124,4 +125,11 @@ int Display::printPayPeriods(){
 
 void Display::customString(string message){
     cout << message << endl;
+}
+
+string Display::GetPath(){
+    string tempPath;
+    cout << "Please enter the path: " << endl;
+    cin >> tempPath;
+    return tempPath;
 }

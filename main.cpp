@@ -11,6 +11,7 @@ int main(){
     string paystubRoot = "_payStub.txt";
 
     string username;
+    string tempPath;
     int option;
 
     bool allGood;
@@ -55,7 +56,14 @@ int main(){
                 data.printPaystub(option);
                 terminal.customString(("You Can Find Your Paystub In " + paystubFile));
                 break;
-            case 5: 
+
+            case 5:
+                tempPath = terminal.GetPath();
+                data.printAllPaystubs(tempPath);
+                terminal.customString(("You Can Find Your Paystub In " + tempPath + paystubFile));
+                break;
+
+            case 6: 
                 terminal.customString("Thank you for using this program!");
                 terminal.customString("Goodbye!");
                 exit(0);
@@ -64,3 +72,5 @@ int main(){
     }
     return 0;
 }
+
+//TODO ADD CUSTOM PAY PERIOD ... NEEDS DATE PULL AND PICK DATE RANGE BASED ON DATE, PRINT TO FILE LOCATION USING PWD IN BASH

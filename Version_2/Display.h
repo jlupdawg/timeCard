@@ -16,7 +16,7 @@ class Display{
         int printOptions();
         void SetLog(Log);
         void printReminder(int, int, int);
-        void customInOut(int&, int&, int&, int&, int&);
+        void customInOut(int&, int&, int&, int&, int&, int&);
         int printPayPeriods();
         void customString(string);
         string GetPath();

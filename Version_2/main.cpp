@@ -73,4 +73,22 @@ int main(){
     return 0;
 }
 
-//TODO ADD CUSTOM PAY PERIOD ... NEEDS DATE PULL AND PICK DATE RANGE BASED ON DATE, PRINT TO FILE LOCATION USING PWD IN BASH
+/*
+    for(unsigned int i = 1; i <= 24; i++){
+        //cout << "LOOP " << i << endl;
+        option = i;
+        totalHours = totalMinutes = total = 0;
+        day1Total = day2Total = hoursTotal = minutesTotal = 0;
+
+        if(option%2 == 0){
+            mm1 = option/2;
+            mm2 = option/2 + 1;
+            dd1 = day2+1;
+            dd2 = day1-1;
+        }
+        else{
+            mm1 = mm2 = (option+1)/2;
+            dd1 = day1;
+            dd2 = day2;
+        }
+        */

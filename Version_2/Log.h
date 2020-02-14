@@ -13,11 +13,12 @@ class Log{
         string usernameFile;
         string rawDataFile;
         string paystubFile;
-        int day, month, hour, minute;
+        int day, month, year;
+        int timeStamp;
+
 
         void sortUserData();
         void getDateTime();
-        void getDate();
         void overrideData();
         void getUserData();
         void pullUsernames();
@@ -31,9 +32,8 @@ class Log{
         void SetPaystubFile(string);
         void clockIn();
         void clockOut();
-        void customInOut(int, int, int, int, int);
-        void printPaystub(int);
-        void printAllPaystubs(string);
+        void customInOut(int, int, int, int, int, int);
+        void printAllPaystubs(string, int, int, int, int);
         void checkTimes(bool&, int&, int&, int&);
 };
 

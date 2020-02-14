@@ -64,7 +64,7 @@ void Display::printReminder(int status, int month, int day){
     }
 }
 
-void Display::customInOut(int& status, int& month, int& day, int& hour, int& minute){
+void Display::customInOut(int& status, int& month, int& day, int& year, int& hour, int& minute){
     cout << endl << "Would you like to: " << endl;
     cout << "1. Clock In" << endl;
     cout << "2. Clock Out" << endl;
@@ -79,7 +79,7 @@ void Display::customInOut(int& status, int& month, int& day, int& hour, int& min
         status = 0;
     }
 
-    cout << "Please enter the month, day, hour, and minute seperated by spaces.";
+    cout << "Please enter the month, day, year, hour, and minute seperated by spaces.";
     do{
         cin >> month >> day >> hour >> minute;
         if(month < 0 || month > 12){

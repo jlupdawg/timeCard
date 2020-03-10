@@ -5,6 +5,7 @@
 #include <iomanip>
 
 #include "log.h"
+#include "Display.h"
 
 #include <iostream> //REMOVE 
 
@@ -148,41 +149,47 @@ void Log::clockOut(){
     refreshUserData();
 }
 
-void Log::customInOut(int status , int month, int day, int year, int hour, int minute){
-    // TODO Come Up With This
+void Log::customInOut(int status, int time){
+    vector<int> temp;
+    temp.push_back(status);
+    temp.push_back(time);
+
+    userData.push_back(temp);
+    overrideData();
+    refreshUserData();
 }
 
-void Log::printAllPaystubs(string path, int mm1, int mm2, int dd1, int dd2){
-    int option;
-    int mm1, mm2, dd1, dd2;
-    int day1 = 2, day2 = 15; //Also change in Display.cpp
+void Log::printAllPaystubs(string path, int start, int duration){
     vector<int> tempVec;
-
     ofstream oF;
+
     int totalHours, totalMinutes, total;
+    totalHours = totalMinutes = total = 0;
+
     int day1Total, day2Total, hoursTotal, minutesTotal;
+    int thisStart;
+    int thisEnd;
+
     string tempPath = (path+paystubFile);
+
     oF.open(tempPath);
     if(!oF.is_open()){
         //cout << "FILE NOT OPENED" << endl;
         exit(1);
     }
+
+    int i = start;
+    while(i < start + 31536000){
         refreshUserData();
         //Delete all data not in range
         //cout << "USERDATA SIZE: " << userData.size() << endl;
+        thisStart = i;
+        thisEnd = thisStart + duration;
         for(unsigned int j = 0; j < userData.size();){
             tempVec = userData.at(j); 
-            if(tempVec.at(1) < mm1 || tempVec.at(1) > mm2){
+            if(tempVec.at(1) < thisStart || tempVec.at(1) > thisEnd){
                 userData.erase(userData.begin() + j);
                 //cout << "ERASED 1" << endl;
-            }
-            else if(tempVec.at(1) == mm1 && tempVec.at(2) < dd1){
-                userData.erase(userData.begin() + j);
-                //cout << "ERASED 2" << endl;
-            }
-            else if(tempVec.at(1) == mm2 && tempVec.at(2) > dd2){
-                userData.erase(userData.begin() + j);
-                //cout << "ERASED 3" << endl;
             }
             else{
                 j++;
@@ -191,58 +198,71 @@ void Log::printAllPaystubs(string path, int mm1, int mm2, int dd1, int dd2){
 
         //cout << "USERDATA SIZE: " << userData.size() << endl;
 
-        oF << setw(40) << setfill('-') << "-" << endl;
-        oF << "PAYSTUB FOR ";
-        oF << setw(2) << setfill('0') << mm1 << "/";
-        oF << setw(2) << setfill('0') << dd1 << " - ";
-        oF << setw(2) << setfill('0') << mm2 << "/";
-        oF << setw(2) << setfill('0') << dd2 << endl;
+        if(userData.size() > 0){
+            totalHours = totalMinutes = total = 0;
+            int mm1, mm2, dd1, dd2;
+
+            GetDate(i, mm1, dd1);
+            GetDate(i+duration, mm2, dd2);
+
+            oF << setw(40) << setfill('-') << "-" << endl;
+            oF << "PAYSTUB FOR ";
+            oF << setw(2) << setfill('0') << mm1 << "/";
+            oF << setw(2) << setfill('0') << dd1 << " - ";
+            oF << setw(2) << setfill('0') << mm2 << "/";
+            oF << setw(2) << setfill('0') << dd2 << endl;
 
 
 
-        unsigned int p = 0;
-        while(p < userData.size()){
-            tempVec = userData.at(p);
-            day1Total = 1440*tempVec.at(2) + 60*tempVec.at(3) + tempVec.at(4);
-            oF << right << setw(2) << setfill('0') << tempVec.at(1) << "/";
-            oF << right << setw(2) << setfill('0') << tempVec.at(2) << "\t";
-            oF << right << setw(2) << setfill('0') << tempVec.at(3) << ":";
-            oF << right << setw(2) << setfill('0') << tempVec.at(4) << " - ";
+            unsigned int p = 0;
+            int thisHour, thisMin, thisDay, thisMonth;
+            while(p < userData.size()){
 
-            p++;
+                tempVec = userData.at(p);
+                day1Total = tempVec.at(1);
+                GetFullDT(day1Total, thisHour, thisMin, thisDay, thisMonth);
+                oF << right << setw(2) << setfill('0') << thisMonth << "/";
+                oF << right << setw(2) << setfill('0') << thisDay << "\t";
+                oF << right << setw(2) << setfill('0') << thisHour << ":";
+                oF << right << setw(2) << setfill('0') << thisMin << " - ";
 
-            tempVec = userData.at(p);
-            day2Total = 1440*tempVec.at(2) + 60*tempVec.at(3) + tempVec.at(4);
-            oF << right << setw(2) << setfill('0') << tempVec.at(1) << "/";
-            oF << right << setw(2) << setfill('0') << tempVec.at(2) << "\t";
-            oF << right << setw(2) << setfill('0') << tempVec.at(3) << ":";
-            oF << right << setw(2) << setfill('0') << tempVec.at(4) << " -- ";
+                p++;
 
-            hoursTotal = (day2Total - day1Total)/60;
-            minutesTotal = (day2Total - day1Total)%60;
+                tempVec = userData.at(p);
+                day2Total = tempVec.at(1);
+                GetFullDT(day2Total, thisHour, thisMin, thisDay, thisMonth);
+                oF << right << setw(2) << setfill('0') << thisMonth << "/";
+                oF << right << setw(2) << setfill('0') << thisDay << "\t";
+                oF << right << setw(2) << setfill('0') << thisHour << ":";
+                oF << right << setw(2) << setfill('0') << thisMin << " -- ";
 
-            oF << right << setw(2) << setfill('0') << hoursTotal << ":";
-            oF << right << setw(2) << setfill('0') << minutesTotal << endl;
+                hoursTotal = (day2Total - day1Total)/3600;
+                minutesTotal = ((day2Total - day1Total)%3600)/60;
 
-            total += day2Total - day1Total;
+                oF << right << setw(2) << setfill('0') << hoursTotal << ":";
+                oF << right << setw(2) << setfill('0') << minutesTotal << endl;
 
-            p++;
+                total += day2Total - day1Total;
+
+                p++;
+            }
+
+            totalHours = total/3600;
+            totalMinutes = (total%3600)/60;
+
+            oF << endl;
+            oF << endl << "GRAND TOTAL : ";
+            oF << right << setw(2) << setfill('0') << totalHours << ":";
+            oF << right << setw(2) << setfill('0') << totalMinutes << endl;
+
+            oF << setw(40) << setfill('-') << "-" << endl;
         }
-
-        totalHours = total/60;
-        totalMinutes = total%60;
-
-        oF << endl;
-        oF << endl << "GRAND TOTAL : ";
-        oF << right << setw(2) << setfill('0') << totalHours << ":";
-        oF << right << setw(2) << setfill('0') << totalMinutes << endl;
-
-        oF << setw(40) << setfill('-') << "-" << endl;
+        i = i + duration;
     }
     oF.close();
 }
 
-void Log::checkTimes(bool& allGood, int& inOut, int& month, int& day){
+void Log::checkTimes(bool& allGood, int& inOut, int& month, int& day, int& badTime){
     int status, lastStatus = 0;
     vector<int> tempVec;
     allGood = true;
@@ -250,13 +270,47 @@ void Log::checkTimes(bool& allGood, int& inOut, int& month, int& day){
         tempVec = userData.at(i);
         status = tempVec.at(0);
         if(status == lastStatus){
+            cout << "BAD DATE" << endl;
             allGood = false;
             inOut = status;
-            month = tempVec.at(1);
-            day = tempVec.at(2);
+            if(status == 0){
+                GetDate(tempVec.at(1), month, day);
+            }
+            else{
+                tempVec = userData.at(i-1);
+                GetDate(tempVec.at(1), month, day);
+            }
             break;
         }
         lastStatus = status;
     }
     
+}
+
+void Log::GetDate(int seconds, int& mm, int& dd){
+    time_t theTime = seconds;
+    //theTime -= 6*60*60;
+    struct tm *aTime = localtime(&theTime);
+    
+    dd = aTime->tm_mday;
+    mm = aTime->tm_mon + 1; 
+}
+
+void Log::GetHourMin(int seconds, int& hr, int& min){
+    time_t theTime = seconds;
+    //theTime -= 6*60*60;
+    struct tm *aTime = localtime(&theTime);
+    hr = aTime->tm_hour;
+    min = aTime->tm_min;
+}
+
+void Log::GetFullDT(int seconds, int& hr, int& min, int& dd, int& mm){
+    time_t theTime = seconds;
+    //theTime -= 6*60*60;
+    struct tm *aTime = localtime(&theTime);
+    hr = aTime->tm_hour;
+    min = aTime->tm_min;
+    
+    dd = aTime->tm_mday;
+    mm = aTime->tm_mon + 1; 
 }

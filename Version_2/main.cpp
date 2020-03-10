@@ -1,4 +1,5 @@
 #include<string>
+#include<iostream>
 
 #include "Display.h"
 #include "Log.h"
@@ -15,7 +16,9 @@ int main(){
     int option;
 
     bool allGood;
-    int month, day, status, hour, minute;
+    int month, day, status, time;
+    int durHours, durMin;
+    int start, duration;
 
     Display terminal;
     Log data;
@@ -32,9 +35,22 @@ int main(){
 
     while(1){
         terminal.SetLog(data);
-        data.checkTimes(allGood, status, month, day);
-        if(!allGood){
-            terminal.printReminder(status, month, day);
+        data.checkTimes(allGood, status, month, day, time);
+        cout << "ALL GOOD " << allGood << endl;
+        cout << "TODO -- FIX CHECK";
+        exit(1);
+        while(!allGood){
+            terminal.printReminder(status, month, day, durHours, durMin);
+
+            if(status == 0){
+                data.customInOut(0, time - (durHours*3600 + durMin*60));
+            }
+            else
+            {
+                data.customInOut(1, time + (durHours*3600 + durMin*60));
+            }
+            
+            data.checkTimes(allGood, status, month, day, time);
         }
         option = terminal.printOptions();
         switch (option){
@@ -47,23 +63,12 @@ int main(){
                 terminal.customString("You've Clocked Out!");
                 break;
             case 3:
-                terminal.customInOut(status, month, day, hour, minute);
-                data.customInOut(status, month, day, hour, minute);
-                terminal.customString("Time Added Successfully!");
-                break;
-            case 4:
-                option = terminal.printPayPeriods();
-                data.printPaystub(option);
-                terminal.customString(("You Can Find Your Paystub In " + paystubFile));
-                break;
-
-            case 5:
                 tempPath = terminal.GetPath();
-                data.printAllPaystubs(tempPath);
+                terminal.GetStartDur(start, duration);
+                data.printAllPaystubs(tempPath, start, duration);
                 terminal.customString(("You Can Find Your Paystub In " + tempPath + paystubFile));
                 break;
-
-            case 6: 
+            case 4: 
                 terminal.customString("Thank you for using this program!");
                 terminal.customString("Goodbye!");
                 exit(0);
@@ -72,23 +77,3 @@ int main(){
     }
     return 0;
 }
-
-/*
-    for(unsigned int i = 1; i <= 24; i++){
-        //cout << "LOOP " << i << endl;
-        option = i;
-        totalHours = totalMinutes = total = 0;
-        day1Total = day2Total = hoursTotal = minutesTotal = 0;
-
-        if(option%2 == 0){
-            mm1 = option/2;
-            mm2 = option/2 + 1;
-            dd1 = day2+1;
-            dd2 = day1-1;
-        }
-        else{
-            mm1 = mm2 = (option+1)/2;
-            dd1 = day1;
-            dd2 = day2;
-        }
-        */

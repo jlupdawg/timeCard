@@ -35,16 +35,14 @@ int Display::printOptions(){
     cout << "What would you like to do?" << endl;
     cout << "1. Clock In" << endl;
     cout << "2. Clock Out" << endl;
-    cout << "3. Custom Time" << endl;
-    cout << "4. Print Paystub" << endl;
-    cout << "5. Print All Paystubs" << endl;
-    cout << "6. Exit the program" << endl;
+    cout << "3. Print All Paystubs" << endl;
+    cout << "4. Exit the program" << endl;
     
     do{
         cin >> option;
-        if(option < 1 || option > 6)
+        if(option < 1 || option > 4)
             cout << "Option Not Valid";
-    }while(option < 1 || option > 6);
+    }while(option < 1 || option > 4);
 
     return option;
 }
@@ -53,14 +51,16 @@ void Display::SetLog(Log IO){
     myIO = IO;
 }
 
-void Display::printReminder(int status, int month, int day){
+void Display::printReminder(int status, int month, int day, int& hours, int& minutes){
     if(status == 1){
         cout << "You forgot to clock out on " << month << "/" << day << "." << endl;
-        cout << "Please fix this by choosing option 3." << endl;
+        cout << "How many hours and minutes did you work? (seperate by a space)" << endl;
+        cin >> hours >> minutes;
     }
     else if(status == 0){
         cout << "You forgot to clock in on " << month << "/" << day << "." << endl;
-        cout << "Please fix this by choosing option 3." << endl;
+        cout << "How many hours and minutes did you work? (seperate by a space)" << endl;
+        cin >> hours >> minutes;
     }
 }
 
@@ -101,28 +101,6 @@ void Display::customInOut(int& status, int& month, int& day, int& year, int& hou
 
 }
 
-int Display::printPayPeriods(){
-    int option;
-    int day1 = 2, day2 = 15; //Also change in Log.cpp
-    cout << "Select Pay Period:" << endl;
-    for(int i = 1; i <= 12; i++){
-            cout << i+i-1 << ".) " << i << "/" << day1 << " - " << i << "/" << day2 << endl;
-            if((i+1) < 12){
-                cout << i+i << ".) " << i << "/" << day2+1 << " - " << (i+1) << "/" << day1-1 << endl;
-            }
-            else{
-                cout << i+i << ".) " << i << "/" << day2  << " - " << 1 << "/" << day1 << endl;
-            }
-    }
-    do{
-        cin >> option;
-        if(option < 0 || option > 24){
-            cout << "Invalid Option. Please Try Again." << endl;
-        }
-    }while(option < 0 || option > 24);
-    return option;
-}
-
 void Display::customString(string message){
     cout << message << endl;
 }
@@ -132,4 +110,9 @@ string Display::GetPath(){
     cout << "Please enter the path: " << endl;
     cin >> tempPath;
     return tempPath;
+}
+
+void Display::GetStartDur(int& startTime, int& payPeriodLen){
+    cout << "Please enter the start time and duration of the pay periods seprated by a space: " << endl;
+    cin >> startTime >> payPeriodLen;
 }

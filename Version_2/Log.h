@@ -32,9 +32,13 @@ class Log{
         void SetPaystubFile(string);
         void clockIn();
         void clockOut();
-        void customInOut(int, int, int, int, int, int);
-        void printAllPaystubs(string, int, int, int, int);
-        void checkTimes(bool&, int&, int&, int&);
+        void customInOut(int, int);
+        void printAllPaystubs(string, int, int);
+        void checkTimes(bool&, int&, int&, int&, int&);
+        void GetDate(int, int& , int&);
+        void GetHourMin(int, int& , int&);
+        void GetFullDT(int, int& , int&, int& , int&);
+
 };
 
 #endif
